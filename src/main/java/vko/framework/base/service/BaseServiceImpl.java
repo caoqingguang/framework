@@ -8,6 +8,12 @@ import vko.framework.mybatis.pager.PagerHelper;
 import vko.framework.mybatis.pager.PagerRequest;
 import vko.framework.mybatis.pager.PagerResponse;
 
+/**
+ * 
+ * @author caoqingguang
+ *
+ * @param <T>
+ */
 public abstract class BaseServiceImpl<T extends SuperBaseEntity> implements IBaseService<T>{
 	
 	protected abstract IBaseMapper<T> getMapper();

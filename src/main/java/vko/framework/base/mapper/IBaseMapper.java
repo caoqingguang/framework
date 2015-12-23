@@ -6,6 +6,12 @@ import org.apache.ibatis.annotations.Param;
 
 import vko.framework.base.entity.SuperBaseEntity;
 
+/**
+ * BaseMapper
+ * @author caoqingguang
+ *
+ * @param <T>
+ */
 public interface IBaseMapper<T extends SuperBaseEntity>{
 	void insertObj(T obj);
 	void deleteObjById(Long id);
