@@ -34,10 +34,10 @@ public class TimerResolve implements Job{
 		if(timerObj.getSock()){
 			TimerSock sock=ac.getBean(TimerSock.class);
 			if(!sock.weCan(timerObj, now)){
-				this.logger.debug("经过认真研究,这个任务,我不执行,{}",timerObj);
+				this.logger.debug("定时任务被更勤劳的小伙伴抢去了,下次我会努力的,{}",timerObj);
 				return ;
 			}
-			this.logger.debug("经过认真研究,这个任务,我需要执行执行,{}",timerObj);
+			this.logger.debug("运气不错,抢到一个定时任务任务,现在执行,{}",timerObj);
 		}
 		Class<?> clazz=timerObj.getClazz();
 		Object target=ac.getBean(clazz);
