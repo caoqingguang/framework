@@ -1,8 +1,5 @@
 package vko.framework.base.jsonp;
 
-import java.io.BufferedWriter;
-import java.io.OutputStreamWriter;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,31 +10,29 @@ import org.springframework.web.servlet.ModelAndView;
 
 public class JsonpInterceptor implements HandlerInterceptor{
 	
-	private String callback="callback";
+	private JsonpStore jsonpStore;
 	
-	public String getCallback() {
-		return callback;
+	
+	public JsonpStore getJsonpStore() {
+		return jsonpStore;
 	}
 
-	public void setCallback(String callback) {
-		this.callback = callback;
+	public void setJsonpStore(JsonpStore jsonpStore) {
+		this.jsonpStore = jsonpStore;
 	}
-
-	ThreadLocal<Boolean> jsonp=new ThreadLocal<Boolean>();
+	
+	
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
-		jsonp.remove();
-		String callback=request.getParameter(this.callback);
-		if(callback==null||"".equals(callback)){
+		this.jsonpStore.clear();
+		String function=request.getParameter(this.jsonpStore.getCallbackFlag());
+		if(function==null||"".equals(function)){
 			return true;
 		}
 		if(handler instanceof HandlerMethod){  
             HandlerMethod method = (HandlerMethod)handler; 
             if(method.getMethodAnnotation(JsonpMethod.class)!=null){
-            	BufferedWriter bw=new BufferedWriter(new OutputStreamWriter(response.getOutputStream()));
-            	bw.write(callback+'(');
-            	bw.flush();
-            	jsonp.set(true);
+            	this.jsonpStore.setFunction(function);
             }
 		}
 		return true;
@@ -51,9 +46,5 @@ public class JsonpInterceptor implements HandlerInterceptor{
 	public void afterCompletion(HttpServletRequest request,
 			HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
-		if(jsonp.get()!=null&&jsonp.get()){
-			response.getOutputStream().write(')');
-			jsonp.remove();
-		};
 	}
 }
